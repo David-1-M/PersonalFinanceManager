@@ -1,6 +1,7 @@
 package com.david.finance.service;
 
 import com.david.finance.model.Transaction;
+import com.david.finance.util.TransactionValidator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,7 @@ public class TransactionService {
     }
 
     public void addTransaction(Transaction transaction) {
+        TransactionValidator.validate(transaction);
         transactions.add(transaction);
     }
 

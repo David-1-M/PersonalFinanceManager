@@ -3,6 +3,7 @@ package com.david.finance;
 import com.david.finance.model.Transaction;
 import com.david.finance.service.TransactionService;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Assertions;
 
 import java.time.LocalDate;
 
@@ -111,4 +112,64 @@ public class TransactionServiceTest {
                 0.01
         );
     }
+
+    @Test
+        void shouldRejectNegativeAmount() {
+
+        TransactionService service = new TransactionService();
+
+        Transaction transaction = new Transaction(
+                1,
+                "EXPENSE",
+                "Food",
+                -500.00,
+                "Invalid expense",
+                LocalDate.now()
+        );
+
+        Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> service.addTransaction(transaction)
+        );
+        }
+
+        @Test
+        void shouldRejectInvalidTransactionType() {
+
+        TransactionService service = new TransactionService();
+
+        Transaction transaction = new Transaction(
+                1,
+                "BANANA",
+                "Food",
+                500.00,
+                "Invalid type",
+                LocalDate.now()
+        );
+
+        Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> service.addTransaction(transaction)
+        );
+        }
+
+        @Test
+        void shouldRejectEmptyCategory() {
+
+        TransactionService service = new TransactionService();
+
+        Transaction transaction = new Transaction(
+                1,
+                "EXPENSE",
+                "",
+                500.00,
+                "Missing category",
+                LocalDate.now()
+        );
+
+        Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> service.addTransaction(transaction)
+        );
+        }
 }
