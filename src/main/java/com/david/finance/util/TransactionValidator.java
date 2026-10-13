@@ -12,7 +12,8 @@ public class TransactionValidator {
             );
         }
 
-        if (transaction.getAmount() <= 0) {
+        if (!Double.isFinite(transaction.getAmount())
+        || transaction.getAmount() <= 0) {
             throw new IllegalArgumentException(
                     "Transaction amount must be greater than zero."
             );

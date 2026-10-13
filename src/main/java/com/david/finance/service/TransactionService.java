@@ -19,6 +19,29 @@ public class TransactionService {
         transactionRepository.save(transaction);
     }
 
+    
+    public boolean updateTransaction(Transaction transaction) {
+
+        TransactionValidator.validate(transaction);
+
+        return transactionRepository.update(transaction);
+    }
+
+    
+    public Transaction getTransactionById(int id) {
+        return transactionRepository.findById(id);
+    }
+
+    public boolean deleteTransaction(int id) {
+        if (transactionRepository.findById(id) == null) {
+            return false;
+        }
+
+        transactionRepository.delete(id);
+        return true;
+    }
+
+    
     public List<Transaction> getAllTransactions() {
         return transactionRepository.findAll();
     }

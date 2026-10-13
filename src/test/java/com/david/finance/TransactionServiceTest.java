@@ -9,7 +9,10 @@ import org.junit.jupiter.api.BeforeEach;
 
 import java.time.LocalDate;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TransactionServiceTest {
 
@@ -191,4 +194,63 @@ public class TransactionServiceTest {
                 () -> service.addTransaction(transaction)
         );
         }
+
+        
+        @Test
+        void shouldUpdateExistingTransaction() {
+
+        TransactionService service = new TransactionService();
+
+        Transaction transaction = new Transaction(
+                1,
+                "EXPENSE",
+                "Food",
+                850.0,
+                "Groceries",
+                LocalDate.now()
+        );
+
+        service.addTransaction(transaction);
+
+        Transaction updatedTransaction = new Transaction(
+                1,
+                "EXPENSE",
+                "Food",
+                950.0,
+                "Updated groceries",
+                LocalDate.now()
+        );
+
+        boolean updated = service.updateTransaction(updatedTransaction);
+
+        assertTrue(updated);
+
+        Transaction savedTransaction =
+                service.getAllTransactions().get(0);
+
+        assertEquals(950.0, savedTransaction.getAmount());
+        assertEquals("Updated groceries", savedTransaction.getDescription());
+        }
+
+        
+        @Test
+        void shouldReturnFalseWhenUpdatingNonexistentTransaction() {
+
+        TransactionService service = new TransactionService();
+
+        Transaction transaction = new Transaction(
+                9999,
+                "EXPENSE",
+                "Food",
+                500.0,
+                "Nonexistent transaction",
+                LocalDate.now()
+        );
+
+        boolean updated = service.updateTransaction(transaction);
+
+        assertFalse(updated);
+        }
+
+
 }

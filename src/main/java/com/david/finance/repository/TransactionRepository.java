@@ -102,6 +102,39 @@ public class TransactionRepository {
         return null;
     }
 
+    
+    public boolean update(Transaction transaction) {
+
+        String sql = """
+                UPDATE transactions
+                SET type = ?,
+                    category = ?,
+                    amount = ?,
+                    description = ?,
+                    date = ?
+                WHERE id = ?
+                """;
+
+        try (Connection connection = DatabaseManager.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, transaction.getType());
+            statement.setString(2, transaction.getCategory());
+            statement.setDouble(3, transaction.getAmount());
+            statement.setString(4, transaction.getDescription());
+            statement.setString(5, transaction.getDate().toString());
+            statement.setInt(6, transaction.getId());
+
+            int rowsAffected = statement.executeUpdate();
+
+            return rowsAffected > 0;
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to update transaction.", e);
+        }
+    }
+
+
     public void delete(int id) {
 
         String sql = """
