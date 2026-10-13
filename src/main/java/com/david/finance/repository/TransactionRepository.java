@@ -10,6 +10,10 @@ import java.util.List;
 
 public class TransactionRepository {
 
+    public TransactionRepository() {
+    DatabaseManager.initializeDatabase();
+    }
+
     public void save(Transaction transaction) {
 
         String sql = """

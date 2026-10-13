@@ -4,12 +4,31 @@ import com.david.finance.model.Transaction;
 import com.david.finance.service.TransactionService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
+import com.david.finance.database.DatabaseManager;
+import org.junit.jupiter.api.BeforeEach;
 
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TransactionServiceTest {
+
+        @BeforeEach
+        void setUp() {
+
+        DatabaseManager.setDatabaseUrl("jdbc:sqlite:test_finance.db");
+
+        DatabaseManager.initializeDatabase();
+
+        try (var connection = DatabaseManager.getConnection();
+                var statement = connection.createStatement()) {
+
+                statement.execute("DELETE FROM transactions");
+
+        } catch (Exception e) {
+                throw new RuntimeException("Failed to reset test database.", e);
+        }
+        }
 
     @Test
     void shouldCalculateTotalIncome() {

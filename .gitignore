@@ -3,3 +3,6 @@
 .idea/
 .vscode/
 *.iml
+*.db
+*.db-shm
+*.db-wal
